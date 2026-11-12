@@ -1,0 +1,236 @@
+/*
+ * Tailwind v4 entry: config lives here, with no tailwind.config.js or PostCSS plugin.
+ * Keep every @import in this top block. Remote fonts are loaded with <link> in __root.tsx.
+ */
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * F&R Sweets design system — premium pâtisserie, lavender & blueberry.
+ * Brand palette: Violet profond #4B245F · Violet myrtille #684080 · Lavande #B9A1D3
+ * Lavande claire #E9DFF2 · Blanc crème #FFFDFB · Doré #C5A15A · Gris doux #77717B
+ */
+
+@theme inline {
+  --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --font-sans: "Lato", system-ui, sans-serif;
+  --font-ui: "Poppins", "Lato", system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-plum: var(--plum);
+  --color-plum-deep: var(--plum-deep);
+  --color-berry: var(--berry);
+  --color-lavender: var(--lavender);
+  --color-lavender-soft: var(--lavender-soft);
+  --color-lavender-mist: var(--lavender-mist);
+  --color-cream: var(--cream);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-success: var(--success);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --shadow-soft: var(--shadow-soft-value);
+  --shadow-float: var(--shadow-float-value);
+  --shadow-glow: var(--shadow-glow-value);
+}
+
+:root {
+  --radius: 0.875rem;
+
+  /* Brand */
+  --plum: oklch(0.342 0.106 312.6);          /* #4B245F */
+  --plum-deep: oklch(0.257 0.079 308.2);     /* #2E1640 */
+  --berry: oklch(0.446 0.110 311.5);         /* #684080 */
+  --lavender: oklch(0.747 0.075 306.5);      /* #B9A1D3 */
+  --lavender-soft: oklch(0.917 0.028 309.2); /* #E9DFF2 */
+  --lavender-mist: oklch(0.960 0.015 312.2); /* #F5EFF9 */
+  --cream: oklch(0.995 0.003 67.8);          /* #FFFDFB */
+  --gold: oklch(0.727 0.099 83);             /* #C5A15A */
+  --gold-soft: oklch(0.88 0.05 85);
+  --success: oklch(0.6 0.09 160);
+
+  --background: var(--cream);
+  --foreground: oklch(0.257 0.06 310);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--foreground);
+  --primary: var(--plum);
+  --primary-foreground: var(--cream);
+  --secondary: var(--lavender-soft);
+  --secondary-foreground: var(--plum);
+  --muted: var(--lavender-mist);
+  --muted-foreground: oklch(0.557 0.017 312.1); /* #77717B */
+  --accent: var(--lavender-soft);
+  --accent-foreground: var(--plum);
+  --destructive: oklch(0.56 0.17 22);
+  --destructive-foreground: var(--cream);
+  --border: oklch(0.917 0.022 309);
+  --input: oklch(0.9 0.025 309);
+  --ring: var(--lavender);
+
+  --chart-1: var(--plum);
+  --chart-2: var(--berry);
+  --chart-3: var(--lavender);
+  --chart-4: var(--gold);
+  --chart-5: var(--lavender-soft);
+
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--plum);
+  --sidebar-primary-foreground: var(--cream);
+  --sidebar-accent: var(--lavender-mist);
+  --sidebar-accent-foreground: var(--plum);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--lavender);
+
+  --gradient-lavender: linear-gradient(180deg, var(--lavender-mist) 0%, var(--cream) 100%);
+  --gradient-hero: radial-gradient(120% 90% at 85% 10%, color-mix(in oklab, var(--lavender) 35%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, var(--cream) 0%, var(--lavender-mist) 100%);
+  --gradient-plum: linear-gradient(135deg, var(--plum) 0%, var(--berry) 100%);
+  --gradient-gold-line: linear-gradient(90deg, transparent, var(--gold), transparent);
+
+  --shadow-soft-value: 0 1px 2px color-mix(in oklab, var(--plum) 6%, transparent), 0 8px 24px -12px color-mix(in oklab, var(--plum) 18%, transparent);
+  --shadow-float-value: 0 24px 60px -24px color-mix(in oklab, var(--plum) 35%, transparent);
+  --shadow-glow-value: 0 10px 30px -10px color-mix(in oklab, var(--berry) 45%, transparent);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-plum);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--lavender-soft);
+    color: var(--plum);
+  }
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+}
+@utility font-ui {
+  font-family: var(--font-ui);
+}
+@utility bg-hero {
+  background-image: var(--gradient-hero);
+}
+@utility bg-lavender-fade {
+  background-image: var(--gradient-lavender);
+}
+@utility bg-plum-gradient {
+  background-image: var(--gradient-plum);
+}
+@utility gold-rule {
+  height: 1px;
+  background-image: var(--gradient-gold-line);
+}
+@utility eyebrow {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+}
+@utility container-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+}
+@utility img-zoom {
+  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 800ms ease, transform 800ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+@keyframes cart-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+.animate-cart-pop {
+  animation: cart-pop 450ms ease;
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-page-in {
+  animation: page-in 500ms ease both;
+}
