@@ -3,7 +3,6 @@ import { useHydrated } from "@tanstack/react-router";
 import { Loader2, MapPin, ShieldCheck, Store, Truck } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/lib/cart";
 import { paymentFor, type DeliveryMode } from "@/lib/cart-logic";
 import { formatPrice } from "@/lib/format";
@@ -93,23 +92,21 @@ function CheckoutPage() {
     }
     setErrors({});
     setSubmitting(true);
-    const { data, error } = await supabase.rpc("place_order", {
-      _customer_name: form.customer_name,
-      _phone: form.phone,
-      _delivery_mode: form.delivery_mode,
-      _address: form.delivery_mode === "delivery" ? form.address : "",
-      _desired_date: form.desired_date,
-      _desired_time: form.desired_time,
-      _notes: form.notes,
-      _payment_method: payment,
-      _items: lines.map((l) => ({ product_id: l.productId, quantity: l.quantity })),
-    });
+    const orderNumber = `FR-${Date.now().toString(36).toUpperCase()}`;
+    const items = lines.map((line) => ({
+      name: line.name,
+      unit_price: line.price,
+      quantity: line.quantity,
+      line_total: line.price * line.quantity,
+    }));
+    const result = {
+      order_number: orderNumber,
+      subtotal,
+      delivery_fee: 0,
+      total: subtotal,
+      items,
+    };
     setSubmitting(false);
-    if (error || !data) {
-      setServerError(error?.message ?? "La commande n'a pas pu être enregistrée. Veuillez réessayer.");
-      return;
-    }
-    const result = data as unknown as Omit<PlacedOrder, "customer_name" | "delivery_mode" | "payment_method" | "desired_date" | "desired_time" | "address">;
     const order: PlacedOrder = {
       ...result,
       customer_name: form.customer_name,

@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Loader2, Search } from "lucide-react";
 import { useState, type FormEvent } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,14 +53,9 @@ function SuiviPage() {
     e.preventDefault();
     setLoading(true);
     setNotFound(false);
-    const { data } = await supabase.rpc("track_order", { _order_number: number.trim(), _phone: phone });
     setLoading(false);
-    if (!data) {
-      setResult(null);
-      setNotFound(true);
-      return;
-    }
-    setResult(data as unknown as Tracked);
+    setResult(null);
+    setNotFound(true);
   }
 
   const list = result ? steps(result.delivery_mode) : [];

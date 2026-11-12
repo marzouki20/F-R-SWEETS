@@ -1,7 +1,3 @@
-import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
-
 export type Category = {
   id: string;
   slug: string;
@@ -32,38 +28,24 @@ export type Product = {
 
 export type Catalog = { categories: Category[]; products: Product[] };
 
-// Public catalogue read: publishable key + public SELECT policies only.
-export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Promise<Catalog> => {
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-  const supabase = createClient<Database>(process.env["SUPABASE_URL"]!, key, {
-    auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
-    global: {
-      fetch: (input, init) => {
-        const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
-        h.set("apikey", key);
-        return fetch(input, { ...init, headers: h });
-      },
-    },
-  });
+const categories: Category[] = [
+  { id: "verrines", slug: "verrines", name: "Verrines", description: null, sort_order: 1 },
+  { id: "entremets", slug: "entremets", name: "Entremets", description: null, sort_order: 2 },
+  { id: "cheesecakes", slug: "cheesecakes", name: "Cheesecakes", description: null, sort_order: 3 },
+  { id: "tartes", slug: "tartes", name: "Tartes", description: null, sort_order: 4 },
+  { id: "patisseries", slug: "patisseries", name: "Pâtisseries", description: null, sort_order: 5 },
+  { id: "boissons", slug: "boissons", name: "Boissons", description: null, sort_order: 6 },
+];
 
-  const [cats, prods] = await Promise.all([
-    supabase.from("categories").select("id, slug, name, description, sort_order").order("sort_order"),
-    supabase
-      .from("products")
-      .select(
-        "id, slug, name, short_description, description, composition, special_note, price, category_id, range_label, menu_section, is_new, is_exclusive, is_featured, is_available, images, sort_order",
-      )
-      .order("sort_order"),
-  ]);
+const products: Product[] = [
+  { id: "verrine-mousse-myrtille", slug: "verrine-mousse-myrtille", name: "Verrine mousse à la myrtille", short_description: "Couches de mousse onctueuse à la myrtille, décor de baies fraîches.", description: "Une verrine légère et gourmande aux couleurs naturelles.", composition: "Mousse à la myrtille, crème et fruits frais.", special_note: null, price: 12, category_id: "verrines", range_label: "Spécial F&R Sweets", menu_section: "Spécial F&R Sweets", is_new: true, is_exclusive: false, is_featured: true, is_available: true, images: [], sort_order: 1 },
+  { id: "poudre-myrtille", slug: "poudre-myrtille", name: "Poudre de myrtille", short_description: "Poudre naturelle de myrtille pour vos pâtisseries et smoothies.", description: "Une poudre 100 % myrtille, riche en couleur et en goût.", composition: "100 % myrtille.", special_note: "Vol. 40 ml", price: 8, category_id: "patisseries", range_label: "Clean Label", menu_section: "Vente à emporter", is_new: true, is_exclusive: false, is_featured: true, is_available: true, images: [], sort_order: 2 },
+  { id: "cheesecake", slug: "cheesecake", name: "Cheesecake", short_description: "Cheesecake crémeux, disponible en version classique ou prestige.", description: null, composition: null, special_note: null, price: 10, category_id: "cheesecakes", range_label: "Desserts Prestige", menu_section: "Desserts Prestige", is_new: false, is_exclusive: false, is_featured: true, is_available: true, images: [], sort_order: 3 },
+  { id: "blue-sensation", slug: "blue-sensation", name: "Blue Sensation", short_description: "Une création signature intense et délicate autour des fruits violets.", description: null, composition: null, special_note: null, price: 14, category_id: "entremets", range_label: "Collection 2026", menu_section: "Créations exclusives", is_new: true, is_exclusive: true, is_featured: true, is_available: true, images: [], sort_order: 4 },
+  { id: "original-myrtille", slug: "original-myrtille", name: "L'Original Myrtille", short_description: "La création emblématique de la maison.", description: null, composition: null, special_note: null, price: 13, category_id: "entremets", range_label: "Collection 2026", menu_section: "Créations exclusives", is_new: true, is_exclusive: true, is_featured: true, is_available: true, images: [], sort_order: 5 },
+  { id: "tartelette-violette-cassis", slug: "tartelette-violette-cassis", name: "Tartelette Violette & Cassis", short_description: "Une tartelette florale et fruitée.", description: null, composition: null, special_note: null, price: 11, category_id: "tartes", range_label: "Collection 2026", menu_section: "Créations exclusives", is_new: true, is_exclusive: true, is_featured: true, is_available: true, images: [], sort_order: 6 },
+];
 
-  if (cats.error || prods.error) {
-    console.error("catalog load failed", cats.error ?? prods.error);
-    return { categories: [], products: [] };
-  }
-
-  return {
-    categories: cats.data,
-    products: prods.data.map((p) => ({ ...p, price: Number(p.price), images: p.images ?? [] })),
-  };
-});
+export async function getCatalog(): Promise<Catalog> {
+  return { categories, products };
+}
