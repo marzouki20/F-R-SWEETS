@@ -37,6 +37,7 @@ const PATISSERIE_PRODUCT_IMAGES: Record<string, string> = {
   choux: patisserieThree,
   tarte: patisserieFour,
   "cheesecake-patisserie": patisserieFive,
+  cheesecake: patisserieFive,
   eclair: patisserieSix,
   croissant: patisserieSeven,
 };
@@ -57,6 +58,12 @@ export function fallbackProductImage(product: Pick<Product, "slug" | "is_new" | 
   }
   if (product.category_id === "patisseries") {
     return PATISSERIE_PRODUCT_IMAGES[product.slug] ?? PATISSERIE_IMAGES[stableIndex(product.slug, PATISSERIE_IMAGES.length)];
+  }
+  if (product.slug === "tarte") {
+    return patisserieFour;
+  }
+  if (product.slug === "cheesecake") {
+    return patisserieFive;
   }
   const images = product.is_new ? NEW_IMAGES : OTHER_IMAGES;
   return images[stableIndex(product.slug, images.length)];
