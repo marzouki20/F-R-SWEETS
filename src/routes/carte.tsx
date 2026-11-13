@@ -60,9 +60,9 @@ function CartePage() {
     const cat = catalog.categories.find((c) => c.slug === categorie);
     const needle = normalize(query.trim());
     return catalog.products.filter((p) => {
-      if (categorie === "nouveautes" && !p.is_new) return false;
+      if (categorie === "nouveautes" && !p.is_exclusive) return false;
       if (categorie === "exclusives" && !p.is_exclusive) return false;
-      if (cat && p.category_id !== cat.id) return false;
+      if (cat && p.category_id !== cat.id && !(categorie === "cheesecakes" && p.slug === "cheesecake-patisserie")) return false;
       if (needle) {
         const hay = normalize(`${p.name} ${p.short_description ?? ""} ${p.composition ?? ""} ${p.range_label ?? ""}`);
         if (!hay.includes(needle)) return false;
@@ -121,6 +121,13 @@ function CartePage() {
       </div>
 
       <section className="container-page py-12">
+        {categorie === "nouveautes" && (
+          <div className="nouveautes-highlight mb-8 rounded-3xl border border-gold/50 bg-lavender-mist p-6 text-center shadow-glow">
+            <p className="eyebrow animate-page-in">À découvrir maintenant</p>
+            <h2 className="mt-2 font-display text-3xl text-plum">Nos créations exclusives</h2>
+            <p className="mt-2 text-muted-foreground">Une sélection inédite imaginée pour vous surprendre.</p>
+          </div>
+        )}
         <p className="mb-6 font-ui text-sm text-muted-foreground">
           {products.length} création{products.length > 1 ? "s" : ""}
         </p>

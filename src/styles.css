@@ -234,3 +234,14 @@
 .animate-page-in {
   animation: page-in 500ms ease both;
 }
+
+@keyframes nouveautes-highlight {
+  0%, 100% { transform: scale(1); box-shadow: var(--shadow-glow-value); }
+  50% { transform: scale(1.015); box-shadow: 0 14px 38px -12px color-mix(in oklab, var(--gold) 55%, transparent); }
+}
+.nouveautes-highlight {
+  animation: nouveautes-highlight 2.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nouveautes-highlight { animation: none; }
+}
