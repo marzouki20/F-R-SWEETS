@@ -62,7 +62,14 @@ function CartePage() {
     return catalog.products.filter((p) => {
       if (categorie === "nouveautes" && !p.is_exclusive) return false;
       if (categorie === "exclusives" && !p.is_exclusive) return false;
-      if (cat && p.category_id !== cat.id && !(categorie === "cheesecakes" && p.slug === "cheesecake-patisserie")) return false;
+      if (
+        cat &&
+        p.category_id !== cat.id &&
+        !(
+          (categorie === "cheesecakes" && p.slug === "cheesecake-patisserie") ||
+          (categorie === "tartes" && p.slug === "tarte")
+        )
+      ) return false;
       if (needle) {
         const hay = normalize(`${p.name} ${p.short_description ?? ""} ${p.composition ?? ""} ${p.range_label ?? ""}`);
         if (!hay.includes(needle)) return false;
