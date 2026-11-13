@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ArrowRight, Instagram, Leaf, Sparkles, HeartHandshake, ShoppingBag } from "lucide-react";
+import { ArrowRight, Instagram, Leaf, Sparkles, HeartHandshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { catalogQuery, exclusives, mainImage, newProducts } from "@/lib/catalog";
-import { formatPrice } from "@/lib/format";
+import { catalogQuery, exclusives } from "@/lib/catalog";
 import { SITE } from "@/lib/site";
 import { Reveal } from "@/components/site/Reveal";
 import { SectionHeading } from "@/components/site/SectionHeading";
-import { NewBadge, ProductCard, useAddToCart } from "@/components/site/ProductCard";
 import { ExclusiveSection } from "@/components/site/ExclusiveSection";
 import verrineImg from "@/assets/neauveau/special (1).jpg";
 import cheesecakeImg from "@/assets/neauveau/special (2).jpg";
@@ -15,6 +13,8 @@ import blancheImg from "@/assets/neauveau/special (3).jpg";
 import poudreImg from "@/assets/autre/476cb346-2cc3-45c8-a816-41066b278226.jpg";
 import vitrineImg from "@/assets/autre/8bc0691e-59a7-496f-a742-fb46bee55af9.jpg";
 import menuImg from "@/assets/menu/menu.jpg";
+import mainLogoImg from "@/assets/logo/1.jpg";
+import patisserieImg from "@/assets/patissier/1e15f6bd-201f-4c13-bc3e-c86a25420b79.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,18 +37,12 @@ export const Route = createFileRoute("/")({
 });
 
 const CREATIONS = [
-  { title: "Nos verrines", text: "Mousses légères en couches, du blanc naturel au violet profond.", img: verrineImg, search: { categorie: "verrines" } },
-  { title: "Nos pâtisseries", text: "Cheesecakes, tartes, éclairs, choux… nos classiques et prestige.", img: cheesecakeImg, search: { categorie: "patisseries" } },
+  { title: "Nos pâtisseries", text: "Cheesecakes, tartes, éclairs, choux… nos classiques et prestige.", img: patisserieImg, search: { categorie: "patisseries" } },
   { title: "Nos créations signature", text: "Des pièces inédites, pensées comme de petits bijoux gourmands.", img: blancheImg, search: { categorie: "exclusives" } },
 ] as const;
 
 function Home() {
   const { data: catalog } = useSuspenseQuery(catalogQuery);
-  const addToCart = useAddToCart();
-  const news = newProducts(catalog).filter((p) => !p.is_exclusive);
-  const featured = news.find((p) => p.slug === "verrine-mousse-myrtille") ?? news[0];
-  const others = news.filter((p) => p.id !== featured?.id);
-
   return (
     <>
       {/* HERO */}
@@ -88,28 +82,12 @@ function Home() {
             <div className="absolute -inset-6 -z-0 rounded-[2.5rem] border border-gold/30 md:-inset-8" aria-hidden />
             <div className="relative overflow-hidden rounded-[2rem] shadow-float">
               <img
-                src={verrineImg}
-                alt="Verrine mousse à la myrtille F&R Sweets, couches du blanc au violet profond"
+                src={mainLogoImg}
+                alt="F&R Sweets Café-Pâtisserie"
                 className="aspect-[4/5] w-full object-cover object-[45%_50%] md:aspect-[5/6]"
                 fetchPriority="high"
               />
             </div>
-            {featured && (
-              <Link
-                to="/produit/$slug"
-                params={{ slug: featured.slug }}
-                className="absolute -bottom-6 left-4 flex items-center gap-4 rounded-2xl border border-border bg-card/95 p-4 pr-6 shadow-float backdrop-blur transition-transform hover:-translate-y-1 md:-left-8"
-              >
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-lavender-soft">
-                  <Sparkles className="h-5 w-5 text-berry" />
-                </span>
-                <span>
-                  <span className="block font-ui text-[0.65rem] uppercase tracking-[0.2em] text-gold">Nouveauté</span>
-                  <span className="block font-display text-xl text-plum">{featured.name}</span>
-                  <span className="font-ui text-sm text-muted-foreground">{formatPrice(featured.price)}</span>
-                </span>
-              </Link>
-            )}
           </div>
         </div>
       </section>
@@ -137,61 +115,6 @@ function Home() {
               </Link>
             </Reveal>
           ))}
-        </div>
-      </section>
-
-      {/* NOUVEAUTÉS */}
-      <section className="bg-lavender-mist py-24">
-        <div className="container-page">
-          <Reveal>
-            <SectionHeading eyebrow="Nouveautés" title="Nos dernières créations">
-              La myrtille dans tous ses états — en verrine gourmande ou en poudre naturelle pour sublimer vos préparations.
-            </SectionHeading>
-          </Reveal>
-          {featured && (
-            <Reveal className="mt-14">
-              <article className="grid overflow-hidden rounded-3xl border border-border bg-card shadow-float lg:grid-cols-2">
-                <div className="relative">
-                  <img src={mainImage(featured)} alt={featured.name} loading="lazy" className="h-full min-h-80 w-full object-cover" />
-                  <NewBadge className="absolute left-5 top-5" />
-                </div>
-                <div className="flex flex-col justify-center gap-5 p-8 md:p-12">
-                  <p className="eyebrow">Création phare</p>
-                  <h3 className="font-display text-4xl leading-tight md:text-5xl">{featured.name}</h3>
-                  <p className="leading-relaxed text-muted-foreground">{featured.description}</p>
-                  <p className="font-display text-3xl text-plum">{formatPrice(featured.price)}</p>
-                  <div className="flex flex-wrap gap-3">
-                    <Button onClick={() => addToCart(featured)} disabled={!featured.is_available}>
-                      <ShoppingBag /> Ajouter au panier
-                    </Button>
-                    <Button asChild variant="outline">
-                      <Link to="/produit/$slug" params={{ slug: featured.slug }}>Découvrir</Link>
-                    </Button>
-                  </div>
-                </div>
-              </article>
-            </Reveal>
-          )}
-          {others.length > 0 && (
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {others.map((p, i) => (
-                <Reveal key={p.id} delay={i * 100}>
-                  <ProductCard product={p} />
-                </Reveal>
-              ))}
-              <Reveal delay={200} className="hidden lg:block">
-                <Link
-                  to="/nouveautes"
-                  className="group flex h-full flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-lavender bg-card/60 p-10 text-center transition-colors hover:bg-card"
-                >
-                  <p className="font-display text-3xl text-plum">Toutes les nouveautés</p>
-                  <span className="inline-flex items-center gap-2 font-ui text-sm text-berry group-hover:gap-3">
-                    Voir la sélection <ArrowRight className="h-4 w-4" />
-                  </span>
-                </Link>
-              </Reveal>
-            </div>
-          )}
         </div>
       </section>
 
