@@ -20,7 +20,7 @@ export function ExclusiveSection({ products }: { products: Product[] }) {
             <h2 className="text-4xl leading-[1.05] text-cream md:text-5xl">Nos Créations Exclusives</h2>
             <div className="gold-rule mx-auto mt-6 w-24" />
             <p className="mt-6 leading-relaxed text-lavender-soft/85">
-              Trois créations inédites, imaginées autour des fruits violets : intenses, délicates et résolument signature.
+              Quatre créations inédites, imaginées autour des fruits violets : intenses, délicates et résolument signature.
             </p>
           </div>
         </Reveal>
@@ -55,4 +55,3 @@ export function ExclusiveSection({ products }: { products: Product[] }) {
     </section>
   );
 }
-

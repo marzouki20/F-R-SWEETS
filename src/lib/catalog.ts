@@ -14,7 +14,7 @@ export function categoryOf(catalog: Catalog, product: Product) {
   return catalog.categories.find((c) => c.id === product.category_id) ?? null;
 }
 
-export function mainImage(product: Pick<Product, "images" | "slug" | "is_new" | "category_id">): string {
+export function mainImage(product: Pick<Product, "images" | "slug" | "is_new" | "category_id" | "is_exclusive">): string {
   return usableProductImages(product)[0] ?? fallbackProductImage(product);
 }
 
